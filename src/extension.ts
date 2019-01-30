@@ -27,8 +27,15 @@ function showFuzzySearch(useCurrentSelection: boolean) {
   let quickPickEntries: Item[] = [];
   for (let i = 0; i < lines.length; ++i) {
     if (lines[i]) {
-      quickPickEntries.push(
-        new Item(`${pad((i + 1).toString(), maxNumberLength)}: ${lines[i]}`, i));
+      const line = `${(i + 1).toString()}: ${lines[i].trim()}`;
+      if (line.length > 60) {
+        quickPickEntries.push(new Item(line.substring(0, 58) + '…', i + 1));
+        quickPickEntries.push(new Item(
+            `${(i + 1).toString()}: …${
+                lines[i].trim().substring(line.length - 60 + 1)}`,
+            i + 1));
+      } else
+        quickPickEntries.push(new Item(line, i + 1));
     }
   }
 
